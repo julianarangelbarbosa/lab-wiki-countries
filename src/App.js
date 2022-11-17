@@ -1,23 +1,38 @@
-import logo from './logo.svg';
 import './App.css';
+import Navbar from './components/Navbar';
+import CountriesList from './components/CountriesList';
+import React, {useState, useEffect} from 'react';
+import axios from 'axios';
+
 
 function App() {
+  const [countries, setCountries] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`https://ih-countries-api.herokuapp.com/countries`)
+      .then((res) => {
+      setCountries(res.data.sort((a, b) => a.name.common.localeCompare(b.name.common)))
+      })
+      .catch((err) => console.log(err));
+  }, []);
+   
+  /* const getFormAPI = async () => {
+    try {
+     const response = await axios.get('https://ih-countries-api.herokuapp.com/countries.')
+    
+    }
+    catch (error) {
+      console.log(error);}
+
+  } */
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      < Navbar />
+      <CountriesList countries={countries}/>
+
     </div>
   );
 }
